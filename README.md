@@ -58,7 +58,6 @@ Nos perdira la contrase;a de root
 
 3./ Y por ultimo nos movemos al diretorio /root/, bajamos el proyecto y lo instalamos.
 ```
-cd
 git clone https://github.com/javierbu/STAPi_r.git
 cd STAPi_r
 ./install
@@ -66,3 +65,35 @@ cd STAPi_r
 
 Durante el proceso de instalacion, cualquier pregunta se responde con enter, tan facil como en windows.
 
+Uso:
+====
+
+Una vez instalado STAPi, escribe  ``` constructor ``` y configura el modulo que quieras usar.
+```
+
+   ___|                          |                           |                  
+  |        _ \    __ \     __|   __|    __|   |   |    __|   __|    _ \     __| 
+  |       (   |   |   |  \__ \   |     |      |   |   (      |     (   |   |    
+ \____|  \___/   _|  _|  ____/  \__|  _|     \__,_|  \___|  \__|  \___/   _| By chewwe    
+
+ Esto es el constructor. Es nuestro programa de carga 
+
+  El cuerpo no puede vivir sin la mente
+
+[::] Elige una de las siguientes opciones:
+
+     [ 1 ] Configurar datos de PiTunel
+     [ 3 ] Iniciar conectando automaticamente a una red  (Debes saber las credenciales)
+     [ 7 ] Iniciar con ataque mana
+     [ 9 ] Iniciar con Wardriving
+     [ 10] Iniciar con router tor
+     [ 11] Inicar creando un punto de acceso modo bridge (puente)
+     [ 12] Inicar con PBC-bucle. (Recoje todas las pulsaciones y sus WPA al alcance.)
+     [ 13] Inicar creando un punto de acceso modo nat. (permite usar wlan0)
+
+     [000] Descargar scripts al inicio (Solo quedara cargado PiTunel)
+     [111] Descargar todos los scripts de inicio, incluso PiTunel del inicio
+     [ 0 ] Salir
+
+[??] Opcion: 
+```
