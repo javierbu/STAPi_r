@@ -32,16 +32,18 @@ No se ha probado en kali linux de escritorio, pero deberia funcionar igualmente 
 
 Documentacion de STAPi
 ======================
-
+--Importante--
+STAPi siempre se manejara con el usuario root.
 
 Instrucciones de instalacion:
 ==============================
 ```
-git clone https://github.com/javierbu/stapi.git
-cd stapi
-tar -xf stapi-0.0.13.tar
-cd install
-./install_stapi.sh
+sudo passwd root
+su
+cd
+git clone https://github.com/javierbu/STAPi_r.git
+cd STAPi_r
+./install
 ```
 Durante el proceso de instalacion, cualquier pregunta se responde con enter, tan facil como en windows.
 
