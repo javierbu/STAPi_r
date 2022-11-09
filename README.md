@@ -37,13 +37,26 @@ STAPi siempre se manejara con el usuario root.
 
 Instrucciones de instalacion:
 ==============================
+
+1./ STAPi siempre funciona bajo el usuario root. De otra manera no funcionaria. Vamos a asignar una contrase;a a root:
 ```
 sudo passwd root
-su
+```
+Aqui nos pedira una contrase;a para root, y verificarla.
+
+2./ Nos ponemos como root
+```
+su root
+```
+Nos perdira la contrase;a de root
+
+3./ Y por ultimo nos movemos al diretorio /root/, bajamos el proyecto y lo instalamos.
+```
 cd
 git clone https://github.com/javierbu/STAPi_r.git
 cd STAPi_r
 ./install
 ```
+
 Durante el proceso de instalacion, cualquier pregunta se responde con enter, tan facil como en windows.
 
