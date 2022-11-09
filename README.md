@@ -37,6 +37,12 @@ STAPi siempre se manejara con el usuario root.
 
 Instrucciones de instalacion:
 ==============================
+Previo a la instalcion deberas descargarte la version de kali correspondiente a tu raspberry e instalara. 
+En estos momentos la version es la 2022.3. Puedes descargarte la neva version aqui:
+
+https://www.kali.org/get-kali/#kali-arm
+
+Luego en su consola, comienza la instalacion:
 
 1./ STAPi siempre funciona bajo el usuario root. De otra manera no funcionaria. Vamos a asignar una contrase;a a root:
 ```
@@ -44,7 +50,7 @@ sudo passwd root
 ```
 Aqui nos pedira una contrase;a para root, y verificarla.
 
-2./ Nos ponemos como root
+2./ Nos autenticamos como root
 ```
 su root
 ```
