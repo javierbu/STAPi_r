@@ -43,6 +43,8 @@ echo "START_DAEMON="false"" >> /etc/default/gpsd
 #Creamos carpeta de logs en /var/log
 mkdir /var/log/stapi; chmod 777 /var/log/stapi
 mkdir /var/log/kismet; chmod 777 /var/log/kismet
+# Movemos scripts a su sitio
+mv scripts/ /root/
 #creamos enlaces a binarios en /usr/local/bin/
 ln /root/scripts/constructor/constructor /usr/local/bin/constructor
 ln /root/scripts/sistema/welcome /usr/local/bin/welcome
