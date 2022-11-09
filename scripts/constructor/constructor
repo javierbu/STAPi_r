@@ -542,7 +542,7 @@ echo "${VIOLETA}     [ 3 ]${NORMAL} Iniciar conectando automaticamente a una red
 echo "${VIOLETA}     [ 7 ]${NORMAL} Iniciar con ataque mana"
 echo "${VIOLETA}     [ 9 ]${NORMAL} Iniciar con Wardriving"
 echo "${VIOLETA}     [ 10]${NORMAL} Iniciar con router tor"
-echo "${VIOLETA}     [ 11]${NORMAL} Inicar creando un punto de acceso modo bridge (puente)"
+echo "${VIOLETA}     [ 11]${NORMAL} Iniciar creando un punto de acceso modo bridge (puente)"
 echo "${VIOLETA}     [ 12]${NORMAL} Inicar con PBC-bucle.${AZUL} (Recoje todas las pulsaciones y sus WPA al alcance.)${NORMAL}"
 echo "${VIOLETA}     [ 13]${NORMAL} Inicar creando un punto de acceso modo nat.${AZUL} (permite usar wlan0)${NORMAL}"
 echo
