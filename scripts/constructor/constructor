@@ -1,0 +1,558 @@
+#!/bin/bash
+#by chewwe & Tux0
+######################
+##################################
+CYAN=`echo -e "\033[01;36m"`
+VERDE=`echo -e "\e[32m"`
+NORMAL=`echo -e "\e[0m"`
+AZUL=`echo -e "\e[34m"`
+ROJO=`echo -e "\e[31m"`
+BLANCO=`echo -e "\033[1;37m"`
+ULTRAVERDE=`echo -e "\e[1;32m"`
+AMARILLO=`echo -e "\e[1;33m"`
+VIOLETA=`echo -e "\e[1;35m"`
+#################################
+SISTEMA=/root/scripts/sistema/
+function descargarpitunel () {
+crontab -r
+echo "${VERDE}[++]${NORMAL} Todos los scripts han sido descargados del inicio, incluso PiTunel"
+echo -ne "${AZUL}[::]${NORMAL} Pulse una tecla para regresar al menu principal "
+read
+menu
+}
+
+function descargar () {
+crontab /root/scripts/sistema/cron/pitunel
+echo "${VERDE}[++]${NORMAL} Scripts de incio descargados. Solo se iniciara con PiTunel."
+echo -ne "${AZUL}[::]${NORMAL} Pulse una tecla para regresar al menu principal "
+read
+menu
+}
+function confirmar_wardriving {
+clear
+banner
+echo
+echo
+echo "     ${AMARILLO} Se cargara de inicio Wardriving con la siguiente interface: ${VERDE} $iface ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/pwardriving 2>/dev/null
+                rm /root/scripts/wardriving/wardriving.conf 2>/dev/null
+                echo "iface=${iface}" >> /root/scripts/wardriving/wardriving.conf
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                wardriving
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_crearap
+        fi
+}
+function wardriving {
+clear
+banner
+echo;echo -ne "${VIOLETA} Wardriving${NORMAL}" ;echo;echo
+echo "     ${AMARILLO} Las pruebas de exito se han realizado con un gps usb BU-353S4.${NORMAL}"
+echo "     ${AMARILLO} Kismet realizara una captura que se guardara en /root/scripts/wardriving/capturas/.${NORMAL}"
+echo "     ${AMARILLO} Puedes convertir el archivo de kismet en kml, gpx, wiglecsv, o pcap ${NORMAL}"
+echo "     ${AMARILLO} con las herramoentas kismetdb_to_kml, kismetdb_to_gpx, kismetdb_to_pcap y kismetdb_to/wiglecsv. ${NORMAL}"
+echo 
+echo -ne "${AMARILLO} Que interface quieres usar para el Wardriving? (La integrada ded la rpi no es aconsejable) ej. wlan1
+: ${NORMAL}"
+read iface
+confirmar_wardriving
+}
+function pbc-bucle {
+clear 
+banner
+echo;echo -ne "${VIOLETA} PBC-bucle${NORMAL}" ;echo;echo
+echo "	   ${ROJO} ATENCION!! Mientras este este modulo trabajando no podras conectarte a ninguna red wifi.${NORMAL}"
+echo
+echo "     ${AMARILLO} Este modulo recoge todas las pulsaciones del boton${NORMAL}"
+echo "     ${AMARILLO} PBC de WPS al alcance, recogiendo y almacenando asi todas las${NORMAL}"
+echo "     ${AMARILLO} llaves WPA de las mismas en /root/scripts/pbc-bucle/llaves/. ${NORMAL}"
+echo "     ${AMARILLO} Se usara la interface wifi integrada de la raspberry (wlan0). ${NORMAL}"
+echo "     ${AMARILLO} Si quieres cambiarla, puedes hacerlo editando el archivo /root/scripts/pbc-bucle/pbc-bucle.conf ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar modulo"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+		iface=wlan0
+                crontab /root/scripts/sistema/cron/ppbc-bucle 2>/dev/null
+                rm /root/scripts/pbc-bucle/pbc-bucle.conf 2>/dev/null
+                echo "iface=${iface}" >> /root/scripts/pbc-bucle/pbc-bucle.conf
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                pbc-bucle
+        fi
+}
+function confirmar_crearap {
+clear
+banner
+echo
+echo
+echo "${AZUL}[::]${NORMAL} Datos introducidos: "
+echo
+echo "     ${AMARILLO} Nombre de la red ${VERDE} $nombreap ${NORMAL}"
+echo "     ${AMARILLO} WPA de la red que crearemos ${VERDE} $wpaap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que crearemos la red ${VERDE} $ifaceap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que daremos internet ${VERDE} $ifacenet  ${NORMAL}"
+echo "     ${AMARILLO} Realizar captura de todo el trafico  ${VERDE} $captura  ${NORMAL} "
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/pcrearap 2>/dev/null
+		rm /root/scripts/crearap/crearap.conf 2>/dev/null
+                echo "nombreap=\"${nombreap}\"" >> /root/scripts/crearap/crearap.conf
+                echo "wpaap=${wpaap}" >> /root/scripts/crearap/crearap.conf
+                echo "ifaceap=${ifaceap}" >> /root/scripts/crearap/crearap.conf
+                echo "ifacenet=${ifacenet}" >> /root/scripts/crearap/crearap.conf
+		echo "captura=${captura}" >> /root/scripts/crearap/crearap.conf
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                crear_ap
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_crearap
+        fi
+}
+function confirmar_crearap_nat {
+clear
+banner
+echo
+echo
+echo "${AZUL}[::]${NORMAL} Datos introducidos: "
+echo
+echo "     ${AMARILLO} Nombre de la red ${VERDE} $nombreap ${NORMAL}"
+echo "     ${AMARILLO} WPA de la red que crearemos ${VERDE} $wpaap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que crearemos la red ${VERDE} $ifaceap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que daremos internet ${VERDE} $ifacenet  ${NORMAL}"
+echo "     ${AMARILLO} Realizar captura de todo el trafico  ${VERDE} $captura  ${NORMAL} "
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/pcrearap_nat 2>/dev/null
+                rm /root/scripts/crearap/nat/crearap_nat.conf 2>/dev/null
+                echo "nombreap=\"${nombreap}\"" >> /root/scripts/crearap/nat/crearap_nat.conf
+                echo "wpaap=${wpaap}" >> /root/scripts/crearap/nat/crearap_nat.conf
+                echo "ifaceap=${ifaceap}" >> /root/scripts/crearap/nat/crearap_nat.conf
+                echo "ifacenet=${ifacenet}" >> /root/scripts/crearap/nat/crearap_nat.conf
+                echo "captura=${captura}" >> /root/scripts/crearap/nat/crearap_nat.conf
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                crear_ap_nat
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_crearap_nat
+        fi
+}
+
+clear
+function crearap {
+clear
+banner
+echo;echo -ne "${VIOLETA} CONFIGURACION ACCES POINT${NORMAL}" ;echo;echo
+echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que crearemos la red ej. wlan1: ${NORMAL}"
+read ifaceap
+echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
+read nombreap
+echo -ne "${AMARILLO}[!!]${NORMAL} WPA de la red que crearemos: ${NORMAL}"
+read wpaap
+echo -e "${AMARILLO}[!!]${NORMAL} Iface con la que daremos intenet ej. eth0,eth1,wlan0."
+echo -e "     Si estas conectado a internet mediante cable rj45, sera eth0."
+echo -e "     Si estas conectado a internet mediante un USB GSM, sera eth1."
+echo -ne "     El wifi integrado no funciona en todas las versiones de raspberry (wlan0):"
+read ifacenet
+echo -e "${AMARILLO}[!!]${NORMAL} Quieres hacer captura de todo? Ten en cuenta el espacio en raspberry"
+echo -ne "     La captura se guardara en /root/scripts/crearap/capturas si/no: ${NORMAL}"
+read captura
+confirmar_crearap
+}
+function crearap_nat {
+clear
+banner
+echo;echo -ne "${VIOLETA} CONFIGURACION ACCES POINT${NORMAL}" ;echo;echo
+echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que crearemos la red ej. wlan1: ${NORMAL}"
+read ifaceap
+echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
+read nombreap
+echo -ne "${AMARILLO}[!!]${NORMAL} WPA de la red que crearemos: ${NORMAL}"
+read wpaap
+echo -e "${AMARILLO}[!!]${NORMAL} Iface con la que daremos intenet ej. eth0,eth1,wlan0."
+echo -e "     Si estas conectado a internet mediante cable rj45, sera eth0."
+echo -e "     Si estas conectado a internet mediante un USB GSM, sera eth1."
+echo -ne "     Si estas conectado a internet mediante wifi, sera wlan0, wlan1):"
+read ifacenet
+echo -e "${AMARILLO}[!!]${NORMAL} Quieres hacer captura de todo? Ten en cuenta el espacio en raspberry"
+echo -ne "     La captura se guardara en /root/scripts/crearap/nat/capturas si/no: ${NORMAL}"
+read captura
+confirmar_crearap_nat
+}
+
+function confirmar_tor {
+clear
+banner
+echo "     ${VIOLETA} CONFIGURACION ROUTER TOR${NORMAL}"echo;echo
+echo
+echo "${AZUL}[::]${NORMAL} Datos introducidos: "
+echo
+echo "     ${AMARILLO} Nombre del AP ${VERDE} $nombreap ${NORMAL}"
+echo "     ${AMARILLO} WPA ${VERDE} $wpaap ${NORMAL}"
+echo "     ${AMARILLO} Interface con la que levantaremos el AP ${VERDE} $ifaceap ${NORMAL}"
+echo "     ${AMARILLO} Interface con la que daremos internet ${VERDE} $ifacenet ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/ptor
+		rm /root/scripts/tor/initor.conf 2>/dev/null
+		echo "ifaceap=${ifaceap}" >> /root/scripts/tor/initor.conf
+		echo "wpaap=${wpaap}" >> /root/scripts/tor/initor.conf
+		echo "nombreap=\"${nombreap}\"" >> /root/scripts/tor/initor.conf
+                echo "ifacenet=${ifacenet}" >> /root/scripts/tor/initor.conf
+		echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                tor
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_tor
+        fi
+}
+function tor {
+clear
+banner 
+echo "     ${VIOLETA} CONFIGURACION ROUTER TOR${NORMAL}"
+echo
+echo -ne "${AMARILLO}[!!]${NORMAL} interface con la que daremos internet (ej. eth1,eth0): ${NORMAL}"
+read ifacenet
+echo -ne "${AMARILLO}[!!]${NORMAL} Interface wifi con la que levantares el AP (ej. wlan0, wlan1): ${NORMAL}"
+read ifaceap
+echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
+read nombreap
+echo -ne "${AMARILLO}[!!]${NORMAL} WPA de la red que crearemos: ${NORMAL}"
+read wpaap
+confirmar_tor
+}
+function conectar_credenciales () {
+clear
+banner
+echo "     ${VIOLETA} CONFIGURAR RED PARA INICIAR CONECTANDOSE A ELLA${NORMAL}"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Nombre de la red ${AZUL}(Ente comillas si es compuesta. Ej. \"mi red\" o mired): ${NORMAL}"
+read ESSID
+echo -ne "${AMARILLO}[??]${NORMAL} Clave WPA/WPA2: "
+read CLAVE
+echo -ne "${AMARILLO}[??]${NORMAL} Iface con la que hacer la conexion. Ej. wlan0: "
+read IFACE
+confirmar_red
+}
+function automana () {
+clear
+banner 
+echo "     ${VIOLETA} CONFIGURACION MANA${NORMAL}"
+echo
+echo  "${AMARILLO}[!!]${NORMAL} Existen 2 tipos de ataques mana  ${NORMAL}"
+echo  "${AMARILLO}[!!]${NORMAL} Ataque normal, que proyecta los probe request solo en los dispositivos de quien los emite ${NORMAL}"
+echo  "${AMARILLO}[!!]${NORMAL} Ataque loud, que proyecta todos los probes request en todos los dispositivos.${NORMAL}"
+echo  "${AMARILLO}[!!]${NORMAL} Elige el tipo de atque ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Ataque mana normal${NORMAL}"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Ataque mana-loud (No es seguro que reparta internet a los clientes)${NORMAL}"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read mana
+rm /root/scripts/mana/mana.conf 2>/dev/null
+        if [ $mana = "1" ];then
+                echo "mana=--mana" >> /root/scripts/mana/mana.conf
+        elif [ $mana = "2" ];then
+                echo "mana=--mana-loud" >> /root/scripts/mana/mana.conf
+        fi
+echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
+read nombreap
+echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que levantaremos el ap. Ej. wlan1: ${NORMAL}"
+read ifaceap
+echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que daremos internet. Ej. eth0: ${NORMAL}"
+read ifacenet
+echo -ne "${AMARILLO}[!!]${NORMAL} Quieres capturar el trafico del ap? Se guardara en /root/scripts/mana/capturas/ "
+echo -ne " Ten en cuenta el espacio en tu raspberry. si/no: ${NORMAL}"
+read captura
+confirmar_mana
+}
+function confirmar_mana () {
+clear
+banner
+echo "${AZUL}[::]${NORMAL} Datos introducidos: "
+echo
+echo "     ${AMARILLO} Interface ap ${VERDE} $ifaceap ${NORMAL}"
+echo "     ${AMARILLO} Interface internet ${VERDE} $ifacenet ${NORMAL}"
+echo "     ${AMARILLO} Nombre de la red ${VERDE} $nombreap ${NORMAL}"
+echo "     ${AMARILLO} Tipo de ataque ${VERDE} $mana ${NORMAL}"
+echo "     ${AMARILLO} Realizar captura de trafico ${VERDE} $captura ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/pmana 2>/dev/null
+                echo "nombreap=\"${nombreap}\"" >> /root/scripts/mana/mana.conf 
+                echo "ifaceap=${ifaceap}" >> /root/scripts/mana/mana.conf 
+                echo "ifacenet=${ifacenet}" >> /root/scripts/mana/mana.conf 
+                echo "captura=${captura}" >> /root/scripts/mana/mana.conf 
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                automana
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_mana
+        fi
+}
+function confirmar_red () {
+clear
+banner
+echo "${AZUL}[::]${NORMAL} Credenciales introducidas: "
+echo
+echo "     ${AMARILLO} Nombre de red ${VERDE} $ESSID ${NORMAL}"
+echo "     ${AMARILLO} Clave WPA/WPA2 ${VERDE} $CLAVE ${NORMAL}"
+echo "     ${AMARILLO} Iface para la conexion ${VERDE} $IFACE ${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar credenciales"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+		crontab /root/scripts/sistema/cron/pinicon
+		sleep 2
+		rm -rf /root/scripts/inicon/inicon.conf &> /dev/null
+                touch /root/scripts/inicon/inicon.conf
+                echo "ESSID=${ESSID}" >> /root/scripts/inicon/inicon.conf
+                echo "CLAVE=${CLAVE}" >> /root/scripts/inicon/inicon.conf
+                echo "IFACENET=${IFACE}" >> /root/scripts/inicon/inicon.conf
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                conectar_credenciales
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+        	echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+        	read 
+        	confirmar_red
+        fi
+}
+function banner () {
+echo
+echo "${VERDE}   ___|                          |                           |                  "
+echo "  |        _ \    __ \     __|   __|    __|   |   |    __|   __|    _ \     __| "
+echo "  |       (   |   |   |  \__ \   |     |      |   |   (      |     (   |   |    "
+echo " \____|  \___/   _|  _|  ____/  \__|  _|     \__,_|  \___|  \__|  \___/   _|${NORMAL} By chewwe    "
+echo 
+echo "${AZUL} Esto es el constructor. Es nuestro programa de carga ${NORMAL}"
+echo
+echo " ${CYAN} `shuf -n 1 /root/scripts/constructor/.citas`${NORMAL}"
+echo
+}
+function datos_tunel () {
+echo -ne "${AMARILLO}[??]${NORMAL} Ip o direccion donde se conectara el tunel: "
+read IP
+echo -ne "${AMARILLO}[??]${NORMAL} Puerto del servidor ssh (normalmente 22): "
+read PUERTO
+echo -ne "${AMARILLO}[??]${NORMAL} Usuario con el que conectara el tunel: "
+read USER
+echo -ne "${AMARILLO}[??]${NORMAL} Password del usuario con el que conectara el tunel: "
+read PASS
+confirmar
+}
+function confirmar () {
+clear
+banner
+echo "${AZUL}[::]${NORMAL} Datos introducidos:"
+echo 
+echo "     ${AMARILLO}IP ${VERDE} $IP ${NORNAL}"
+echo "     ${AMARILLO}Usuario ${VERDE} $USER ${NORNAL}"
+echo "     ${AMARILLO}Password ${VERDE} $PASS ${NORNAL}"
+echo "     ${AMARILLO}Puerto ssh en servidor ${VERDE} $PUERTO ${NORNAL}"
+echo 
+echo "${AZUL} COMPRUEBA QUE LOS DATOS SEAN CORRECTOS POR FAVOR${NORMAL}"
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar credenciales"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+	if [ $OPCION = "0" ];then
+		echo "${AZUL}[::]${NORMAL} Bye!!"
+		exit 0
+	elif [ $OPCION = "1" ];then
+		rm -rf /root/scripts/sistema/pitunel/datostunel &> /dev/null
+		touch /root/scripts/sistema/pitunel/datostunel
+		echo "puerto=${PUERTO}" >> /root/scripts/sistema/pitunel/datostunel
+		echo "ip=${IP}" >> /root/scripts/sistema/pitunel/datostunel
+		echo "user=${USER}" >> /root/scripts/sistema/pitunel/datostunel
+		echo "pass=${PASS}" >> /root/scripts/sistema/pitunel/datostunel
+		echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+		crontab /root/scripts/sistema/cron/pitunel
+		read
+		menu
+	elif [ $OPCION = "2" ];then
+		datos_tunel
+	elif [ $OPCION = "3" ];then
+        	menu
+	else 
+        echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+        read 
+       	confirmar
+	fi
+}
+function opciones () {
+if [ $OPCION = 0 ]; then
+	echo "${AZUL}[::]${NORMAL} Bye!!"
+	exit
+elif [ $OPCION = "000" ];then
+	descargar
+elif [ $OPCION = "1" ]; then
+	clear
+	banner
+	datos_tunel
+elif [ $OPCION = "3" ]; then
+	clear
+	banner
+        conectar_credenciales
+elif [ $OPCION = "7" ];then
+	automana
+elif [ $OPCION = "9" ];then
+        wardriving
+elif [ $OPCION = "10" ]; then
+	tor
+elif [ $OPCION = "11" ];then
+        crearap
+elif [ $OPCION = "12" ];then
+        pbc-bucle
+elif [ $OPCION = "9" ];then
+        wardriving
+elif [ $OPCION = "111" ];then
+        descargarpitunel
+elif [ $OPCION = "13" ];then
+        crearap_nat
+else 
+	menu     
+fi
+}
+function menu () {
+clear
+banner
+echo "${AZUL}[::]${NORMAL} Elige una de las siguientes opciones:"
+echo
+echo "${VIOLETA}     [ 1 ]${NORMAL} Configurar datos de PiTunel"
+echo "${VIOLETA}     [ 3 ]${NORMAL} Iniciar conectando automaticamente a una red ${AZUL} (Debes saber las credenciales)${NORMAL}"
+echo "${VIOLETA}     [ 7 ]${NORMAL} Iniciar con ataque mana"
+echo "${VIOLETA}     [ 9 ]${NORMAL} Iniciar con Wardriving"
+echo "${VIOLETA}     [ 10]${NORMAL} Iniciar con router tor"
+echo "${VIOLETA}     [ 11]${NORMAL} Inicar creando un punto de acceso modo bridge (puente)"
+echo "${VIOLETA}     [ 12]${NORMAL} Inicar con PBC-bucle.${AZUL} (Recoje todas las pulsaciones y sus WPA al alcance.)${NORMAL}"
+echo "${VIOLETA}     [ 13]${NORMAL} Inicar creando un punto de acceso modo nat (permite usar wlan0)"
+echo
+echo "${VIOLETA}     [000]${NORMAL} Descargar scripts al inicio${AZUL} (Solo quedara cargado PiTunel)${NORMAL}"
+echo "${VIOLETA}     [111]${NORMAL} Descargar todos los scripts de inicio, incluso PiTunel del inicio${NORMAL}"
+echo "${VIOLETA}     [ 0 ]${NORMAL} Salir"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+opciones
+}
+menu
+

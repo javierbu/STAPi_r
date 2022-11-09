@@ -1,0 +1,246 @@
+#!/bin/bash
+#source /root/scripts/automana/automana2
+source /root/scripts/sistema/colores
+function wardriving {
+        clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inicio Wardriving."
+        echo
+        echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque."
+        echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log de kismet."
+        echo "   ${VIOLETA}[ 3 ]${NORMAL} Quiero parar el ataque."
+        echo "   ${VIOLETA}[ 4 ]${NORMAL} No quiero nada, solo una shell."
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+                if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "4" ];then
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "2" ];then
+                        clear
+                        echo;echo "${AMARILLO} Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}"
+                        tail  -n 20 -f   /tmp/kismet.log
+                elif [ $OPCION = "3" ];then
+                        for i in $(ps fax | grep kismet | grep -v grep | awk -F " " '{print $1}' 2>/dev/null)
+                        do
+                                kill -9 $i
+                        done
+                else
+                        welcome
+                fi
+}
+
+function pbc-bucle {
+        clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inicio PBC-bucle."
+        echo
+	echo "   ${ROJO} ATENCION!!!! Cuando esta este modulo trabajando, no tendras posibilidad de conectarte a una red wifi${NORMAL}"
+	echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque."
+        echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log del modulo PBC-bucle."
+	echo "   ${VIOLETA}[ 3 ]${NORMAL} Quiero parar el ataque."
+        echo "   ${VIOLETA}[ 4 ]${NORMAL} No quiero nada, solo una shell."
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+                if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+                        exit
+
+                elif [ $OPCION = "4" ];then
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "2" ];then
+                        clear
+			while true; do
+				echo;echo "${AMARILLO}  Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}";
+				echo "${AMARILLO} !!! ESTO NO PARARA EL ATQUE NI LO DESCARGARA DE INICIO. PARA ELLO USA welcome!!!${NORMAL}";echo;echo;
+				echo "   ${ROJO} ATENCION!!!! Cuando esta este modulo trabajando, no tendras posibilidad de conectarte a una red wifi${NORMAL}"
+				tail  -n 12   /tmp/pbc-bucle.log
+				sleep 1
+				clear
+				done
+		elif [ $OPCION = "3" ];then
+			for i in $(ps fax | grep pbc-bucle | grep -v grep | awk -F " " '{print $1}' 2>/dev/null)
+			do
+				kill -9 $i
+			done
+                else
+                        welcome
+                fi
+}
+function mana {
+        clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inio ataque mana."
+        echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque"
+        echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log de mi ap"
+        echo "   ${VIOLETA}[ 3 ]${NORMAL} No quiero nada, solo una shell"
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+                if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "3" ];then
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "2" ];then
+                        clear
+                        echo;echo "${AMARILLO} Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}"
+                        echo;echo
+                        tail -n 50 -f /tmp/mana.log
+                elif [ $OPCION = "4" ];then
+                        clear
+                        echo;echo " Bye!!"
+                        exit 0
+                else
+                        welcome
+	        fi
+}
+function crearap {
+        clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inicio crear un AP."
+        echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque"
+	echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log de mi ap"
+	echo "   ${VIOLETA}[ 3 ]${NORMAL} No quiero nada, solo una shell"
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+                if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "3" ];then
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+                        exit
+		elif [ $OPCION = "2" ];then
+			clear
+			echo;echo "${AMARILLO} Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}"
+			echo;echo
+			tail -n 30 -f /tmp/berate.log
+		elif [ $OPCION = "4" ];then
+                        clear
+                        echo;echo " Bye!!"
+			exit 0
+                else
+                        welcome
+	        fi
+}
+function tor {
+	clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inicio el router tor."
+        echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque"
+	echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log del punto de acceso"
+	echo "   ${VIOLETA}[ 3 ]${NORMAL} No quiero nada, solo una shell"
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+		if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+			echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+			exit
+                elif [ $OPCION = "3" ];then
+			echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+			exit
+		elif [ $OPCION = "2" ];then
+                        clear
+                        echo;echo "${AMARILLO} Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}"
+                        echo;echo
+                        tail -f -n 30 /tmp/torlog.log
+		elif [ $OPCION = "4" ];then
+			clear
+                        echo;echo " Bye!!"
+                        exit 
+                else
+                        welcome
+	        fi
+}
+ps fax | grep 'tor -f' | grep -v grep >/dev/null
+if [ $? = "0" ];then
+tor
+fi
+ps fax | grep ' --mana-loggin' | grep -v grep >/dev/null
+if [  $? = "0" ];then
+mana
+fi
+ps fax | grep nmcli | grep -v grep >/dev/null
+if [  $? = "0" ];then
+inicon
+fi
+ps fax  | grep -w berate_ap | grep -v grep  >/dev/null
+if [  $? = "0" ];then
+crearap
+fi
+ps fax  | grep -w pbc-bucle | grep -v grep  >/dev/null
+if [  $? = "0" ];then
+pbc-bucle
+fi
+ps fax | grep kismet | grep -v grep >/dev/null
+if [ $? = "0" ];then
+wardriving
+fi
+function descargar () {
+rm /etc/blacklist.d/blacklist.conf >/dev/null
+crontab /root/scripts/sistema/cron/pitunel
+echo "${VERDE}[++]${NORMAL} Scripts de incio descargados. Solo se iniciara con PiTunel."
+echo -ne "${AZUL}[::]${NORMAL} Pulse una tecla para regresar al menu principal "
+read
+exit & welcome
+}
+echo
+echo "${AMARILLO} NO HAY MODULOS ACTIVOS ${NORMAL}"
+echo

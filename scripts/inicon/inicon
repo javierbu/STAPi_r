@@ -1,0 +1,14 @@
+#!/bin/bash
+#Debes configurar los valores en  inicon.conf
+source /root/scripts/inicon/inicon.conf
+function conectar () {
+nmcli device wifi con "${ESSID}" ifname $IFACENET password "${CLAVE}" 
+                if [ $? = 0 ]; then
+			crontab /root/scripts/sistema/cron/pitunel
+			exit 0
+                else
+			sleep 10
+			conectar
+                fi
+}
+conectar

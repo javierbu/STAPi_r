@@ -1,0 +1,4 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SHELL=/bin/bash
+* * * * *  /root/scripts/crearap/crearap.sh  
+* * * * * /root/scripts/sistema/pitunel/revisar.sh

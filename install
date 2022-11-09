@@ -1,0 +1,74 @@
+#!/bin/bash
+#by chewwe
+######################
+##################################
+CYAN=`echo -e "\033[01;36m"`
+VERDE=`echo -e "\e[32m"`
+NORMAL=`echo -e "\e[0m"`
+AZUL=`echo -e "\e[34m"`
+ROJO=`echo -e "\e[31m"`
+BLANCO=`echo -e "\033[1;37m"`
+ULTRAVERDE=`echo -e "\e[1;32m"`
+AMARILLO=`echo -e "\e[1;33m"`
+VIOLETA=`echo -e "\e[1;35m"`
+#################################
+
+#Damos permisos a root para usar ssh
+cat /etc/ssh/sshd_config | grep -v PermitRootLogin  > permite ; echo "PermitRootLogin yes" >> permite ; mv permite /etc/ssh/sshd_config
+#Instalamos dependencias
+PWD=$(pwd)
+apt-get update
+if [ $? = "0" ]; then
+	echo "${VERDE}[++]${NORMAL} Upgrade realizado con exito"
+else
+	echo "${ROJO}[XX]${NORMAL} Algo salio mal. Por favor comprueba tu conexion a internet y vuelve a intentarlo."
+	exit
+fi
+apt-get install  sshpass reaver aircrack-ng kismet gpsd gpsd-clients util-linux procps hostapd iproute2 iw haveged bash-completion dnsmasq tor berate-ap
+if [ $? = "0" ]; then
+        echo "${VERDE}[++]${NORMAL} Dependencias instaladas con exito"
+else
+        echo "${ROJO}[XX]${NORMAL} Algo salio mal. Por favor comprueba posibles causas y prueba de nuevo."
+	exit
+fi
+# Modificamos archivo kismet.conf para entendimiento con gps
+echo "# Modificacion de stapi para entendimiento con gps" >> /etc/kismet/kismet.conf
+echo "gps=gpsd:host=localhost,port=2947,reconnect=true" >> /etc/kismet/kismet.conf
+# Creamos archivo de configuracion para gpsd
+touch /etc/default/gpsd
+echo "DEVICES="/dev/ttyUSB0"" >> /etc/default/gpsd
+echo "GPSD_OPTIONS="-F /var/run/gpsd.sock -b -n"" >> /etc/default/gpsd
+echo "USBAUTO="true"" >> /etc/default/gpsd
+echo "START_DAEMON="false"" >> /etc/default/gpsd
+#Creamos carpeta de logs en /var/log
+mkdir /var/log/stapi; chmod 777 /var/log/stapi
+mkdir /var/log/kismet; chmod 777 /var/log/kismet
+#creamos enlaces a binarios en /usr/local/bin/
+ln /root/scripts/constructor/constructor /usr/local/bin/constructor
+ln /root/scripts/sistema/welcome /usr/local/bin/welcome
+#Creamos banner para ssh
+touch /etc/ssh_banner
+echo "   _____ _______       _____ _" >> /etc/ssh_banner
+echo "  / ____|__   __|/\   |  __ (_)   SYSTEM" >> /etc/ssh_banner
+echo " | (___    | |  /  \  | |__) |    TARGETED" >> /etc/ssh_banner
+echo "  \___ \   | | / /\ \ |  ___/ |   ATTACK" >> /etc/ssh_banner
+echo "  ____) |  | |/ ____ \| |   | |   WITH">> /etc/ssh_banner
+echo " |_____/   |_/_/    \_\_|   |_|R  RASPBERRY Pi" >> /etc/ssh_banner
+echo " ####################################" >> /etc/ssh_banner
+echo "     ###### BIENVENIDO A STAPi ########" >> /etc/ssh_banner
+echo "#STAPi" >> /etc/ssh/sshd_config
+echo "Banner /etc/ssh_banner" >> /etc/ssh/sshd_config
+# A;adimos orden a .bashrc para lanzar welcome al iniciar sesion ssh
+echo "# Stapi" >> /root/.bashrc
+echo "if [[ -n \$SSH_CONNECTION ]] ; then" >> /root/.bashrc
+echo "bash /root/scripts/sistema/welcome" >> /root/.bashrc
+echo "fi" >> /root/.bashrc
+# Eliminamos y creamos motd
+rm /etc/motd
+touch /etc/motd
+# Eliminamos y creamos /etc/hostname
+rm /etc/hostname
+echo "STAPi" > /etc/hostname
+exit 0
+
+

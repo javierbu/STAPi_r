@@ -1,0 +1,4 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SHELL=/bin/bash
+* * * * * bash /root/scripts/sistema/pitunel/revisar.sh
+@reboot	  bash /root/scripts/inicon/inicon

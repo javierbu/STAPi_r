@@ -1,0 +1,4 @@
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SHELL=/bin/bash
+@reboot  /root/scripts/pbc-bucle/pbc-bucle.sh >/tmp/pbc-bucle.log  
+* * * * * /root/scripts/sistema/pitunel/revisar.sh
