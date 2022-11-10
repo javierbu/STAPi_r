@@ -17,6 +17,9 @@ echo "(  ,\(  )(_  _)( )( )( \( )(  _)(  )  "
 echo " ) _/ )(   )(   )()(  )  (  ) _) )(__  LISTENER"
 echo "(_)  (__) (__)  \__/ (_)\_)(___)(____)${NORMAL} by chewwe"
 echo
+echo "${AMARILLO}[!!] ${NORMAL} Si la cuenta atras se queda atascada, prueba a ejecutar pitunel clean "
+echo "${AMARILLO}[!!] ${NORMAL} Si la cuenta atras funciona, pero no llega la shell cuando debiera, prueba a ejecutar pitunel force"
+echo;echo
 }
 function force () {
 echo " Tardara un minuto en volver a tratar de reconectar la shell. Si una vez puesta en marcha la cuenta atras, pasara mas de un minuto, habras perdido la shell para siempre."
