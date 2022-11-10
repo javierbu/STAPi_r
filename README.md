@@ -16,54 +16,54 @@ STAPi
 ==========
 
 
-Stapi automatiza algunas funciones que quiza sean de u interes en tu raspberry:
+Stapi automatiza algunas funciones que quizá sean de tu interés en tu raspberry:
 
 - Crear punto de acceso en modo nat.
 - Crear punto de acceso en modo bridge.
 - Crear portal cautivo (nodogsplash)
 - Crear punto de acceso router tor.
-- Crear punto de acceso mana.
+- Crear punto de acceso maná.
 - Wardriving.
 - Captura PBC WPS
-- Conexion tunelizada ssh. PiTunel.
+- Conexioón reversa tunelizada ssh. PiTunel.
 
-Esta escita en bash y pensada para usarla solo en modo consola. Nunca se usa el modo grafico.
+Está escita en bash y pensada para usarla solo en modo consola. Nunca se usa el modo gráfico.
 
 
 Documentacion de STAPi
 ======================
 --Importante--
-STAPi siempre se manejara con el usuario root.
+STAPi siempre se manejará con el usuario root.
 
 Instrucciones de instalacion:
 ==============================
-Previo a la instalcion deberas descargarte la version de kali correspondiente a tu raspberry e instalara. 
-En estos momentos la version es la 2022.3. Puedes descargarte la neva version aqui:
+Previo a la instalción deberás descargarte la version de kali correspondiente a tu raspberry e instalara. 
+En estos momentos (nov. 2022) la versión es la 2022.3. Puedes descargarte la neva version aquí:
 
 https://www.kali.org/get-kali/#kali-arm
 
-Luego en su consola, comienza la instalacion:
+Luego en su consola, comienza la instalación:
 
-1./ STAPi siempre funciona bajo el usuario root. De otra manera no funcionaria. Vamos a asignar una contrase;a a root:
+1./ STAPi siempre funciona bajo el usuario root. De otra manera no funcionará. Vamos a asignar una contraseña a root:
 ```
 sudo passwd root
 ```
-Aqui nos pedira una contrase;a para root, y verificarla.
+Aquí nos pedirá una contraseña para root, y verificarla.
 
 2./ Nos autenticamos como root
 ```
 su root
 ```
-Nos perdira la contrase;a de root
+Nos perdirá la contraseña de root
 
-3./ Y por ultimo nos movemos al diretorio /root/, bajamos el proyecto y lo instalamos.
+3./ Y por ultimo, bajamos el proyecto y lo instalamos.
 ```
 git clone https://github.com/javierbu/STAPi_r.git
 cd STAPi_r
 ./install
 ```
 
-Durante el proceso de instalacion, cualquier pregunta se responde con enter, tan facil como en windows.
+Durante el proceso de instalación, cualquier pregunta se responde con enter, tan fácil como en windows.
 
 Uso:
 ====
@@ -90,6 +90,7 @@ Una vez instalado STAPi, escribe  ``` constructor ``` y configura el modulo que 
      [ 11] Inicar creando un punto de acceso modo bridge (puente)
      [ 12] Inicar con PBC-bucle. (Recoje todas las pulsaciones y sus WPA al alcance.)
      [ 13] Inicar creando un punto de acceso modo nat. (permite usar wlan0)
+     [ 14] Inicar creando un portal cautivo (nodogsplash). (permite usar wlan0)
 
      [000] Descargar scripts al inicio (Solo quedara cargado PiTunel)
      [111] Descargar todos los scripts de inicio, incluso PiTunel del inicio
