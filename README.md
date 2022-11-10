@@ -20,6 +20,7 @@ Stapi automatiza algunas funciones que quiza sean de u interes en tu raspberry:
 
 - Crear punto de acceso en modo nat.
 - Crear punto de acceso en modo bridge.
+- Crear portal cautivo (nodogsplash)
 - Crear punto de acceso router tor.
 - Crear punto de acceso mana.
 - Wardriving.
