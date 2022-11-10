@@ -87,10 +87,10 @@ Una vez instalado STAPi, escribe  ``` constructor ``` y configura el modulo que 
      [ 7 ] Iniciar con ataque mana
      [ 9 ] Iniciar con Wardriving
      [ 10] Iniciar con router tor
-     [ 11] Inicar creando un punto de acceso modo bridge (puente)
-     [ 12] Inicar con PBC-bucle. (Recoje todas las pulsaciones y sus WPA al alcance.)
-     [ 13] Inicar creando un punto de acceso modo nat. (permite usar wlan0)
-     [ 14] Inicar creando un portal cautivo (nodogsplash). (permite usar wlan0)
+     [ 11] Iniciar creando un punto de acceso modo bridge (puente)
+     [ 12] Iniciar con PBC-bucle. (Recoje todas las pulsaciones y sus WPA al alcance.)
+     [ 13] Iniciar creando un punto de acceso modo nat. (permite usar wlan0)
+     [ 14] Iniciar creando un portal cautivo (nodogsplash). (permite usar wlan0)
 
      [000] Descargar scripts al inicio (Solo quedara cargado PiTunel)
      [111] Descargar todos los scripts de inicio, incluso PiTunel del inicio
