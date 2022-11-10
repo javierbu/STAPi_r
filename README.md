@@ -27,7 +27,6 @@ Stapi automatiza algunas funciones que quiza sean de u interes en tu raspberry:
 - Conexion tunelizada ssh. PiTunel.
 
 Esta escita en bash y pensada para usarla solo en modo consola. Nunca se usa el modo grafico.
-No se ha probado en kali linux de escritorio, pero deberia funcionar igualmente si no todo, casi todo.
 
 
 Documentacion de STAPi
