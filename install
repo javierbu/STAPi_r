@@ -24,7 +24,7 @@ else
 	echo "${ROJO}[XX]${NORMAL} Algo salio mal. Por favor comprueba tu conexion a internet y vuelve a intentarlo."
 	exit
 fi
-apt-get install  sshpass reaver aircrack-ng kismet gpsd gpsd-clients util-linux procps hostapd iproute2 iw haveged bash-completion dnsmasq tor berate-ap
+apt-get install  sshpass  aircrack-ng kismet gpsd gpsd-clients util-linux procps hostapd iproute2 iw haveged bash-completion dnsmasq tor berate-ap
 if [ $? = "0" ]; then
         echo "${VERDE}[++]${NORMAL} Dependencias instaladas con exito"
 else
@@ -71,6 +71,24 @@ touch /etc/motd
 # Eliminamos y creamos /etc/hostname
 rm /etc/hostname
 echo "STAPi" > /etc/hostname
+# Preguntamos por la instalacion de nodogsplash
+clear
+echo;echo -ne "${AMARILLO}[??]${NORMAL} Quieres instalar nodogsplash? sera necesario si quieres hacer un portal cautivo. si/no: "
+read respuesta
+if [ $respuesta = si ];then
+	apt install git libmicrohttpd-dev build-essential
+	mkdir /root/github
+	cd /root/github
+	git clone https://github.com/nodogsplash/nodogsplash.git
+	cd nodogsplash
+	make
+	make install
+	clear
+	echo;echo;echo -e "${VERDE}[::]${NORMAL} Esta todo instalado. Escribe constructor para empezar."
+exit 0
+else
+	echo e "${AZUL}[::]${NORMAL} Ok, bye! "
+fi
 exit 0
 
 

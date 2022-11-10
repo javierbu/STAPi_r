@@ -42,7 +42,6 @@ function wardriving {
                         welcome
                 fi
 }
-
 function pbc-bucle {
         clear
         echo
@@ -170,6 +169,45 @@ function crearap {
                         welcome
 	        fi
 }
+function cautivo {
+        clear
+        echo
+        echo "${AMARILLO}   ATENCION${NORMAL}"
+        echo
+        echo "${VERDE}[::]${NORMAL} Tienes activado de inicio portal cautivo."
+        echo
+        echo "   ${VIOLETA}[ 1 ]${NORMAL} Quiero desactivarlo de arranque"
+        echo "   ${VIOLETA}[ 2 ]${NORMAL} Quiero ver el log de mi ap"
+        echo "   ${VIOLETA}[ 3 ]${NORMAL} No quiero nada, solo una shell"
+        echo
+        echo "${VERDE} PUEDES REGRESAR A ESTE SCRIPT EJECUTANDO welcome${NORMAL}"
+        echo
+        echo -n "${AMARILLO}[??]${NORMAL} Opcion: "
+        read OPCION
+                if [ $OPCION = "1" ];then
+                        crontab /root/scripts/sistema/cron/pitunel
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Hecho. Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "3" ];then
+                        echo
+                        echo "${AZUL}[::]${NORMAL} Bye!"
+                        echo
+                        exit
+                elif [ $OPCION = "2" ];then
+                        clear
+                        echo;echo "${AMARILLO} Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}"
+                        echo;echo
+                        tail -n 30 -f /tmp/berate.log
+                elif [ $OPCION = "4" ];then
+                        clear
+                        echo;echo " Bye!!"
+                        exit 0
+                else
+                        welcome
+                fi
+}
 function tor {
 	clear
         echo
@@ -232,6 +270,10 @@ fi
 ps fax | grep kismet | grep -v grep >/dev/null
 if [ $? = "0" ];then
 wardriving
+fi
+ps fax  | grep -w nodogsplash | grep -v grep  >/dev/null
+if [  $? = "0" ];then
+cautivo
 fi
 function descargar () {
 rm /etc/blacklist.d/blacklist.conf >/dev/null

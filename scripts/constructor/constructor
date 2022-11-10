@@ -205,6 +205,51 @@ read OPCION
                 confirmar_crearap_nat
         fi
 }
+function confirmar_cautivo {
+clear
+banner
+echo
+echo
+echo "${AZUL}[::]${NORMAL} Datos introducidos: "
+echo
+echo "     ${AMARILLO} Nombre de la red ${VERDE} $nombreap ${NORMAL}"
+echo "     ${AMARILLO} WPA de la red que crearemos ${VERDE} $wpaap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que crearemos la red ${VERDE} $ifaceap ${NORMAL}"
+echo "     ${AMARILLO} Iface con la que daremos internet ${VERDE} $ifacenet  ${NORMAL}"
+echo "     ${AMARILLO} Realizar captura de todo el trafico  ${VERDE} $captura  ${NORMAL} "
+echo
+echo "     ${VIOLETA}[ 1 ]${NORMAL} Confirmar datos"
+echo "     ${VIOLETA}[ 2 ]${NORMAL} Volver a configurar los datos"
+echo "     ${VIOLETA}[ 3 ]${NORMAL} Regresar a menu principal"
+echo "     ${VIOLETA}[ 0 ]${NORMAL} Salir sin configurar nada"
+echo
+echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
+read OPCION
+        if [ $OPCION = "0" ];then
+                echo "${AZUL}[::]${NORMAL} Bye!!"
+                exit 0
+        elif [ $OPCION = "1" ];then
+                crontab /root/scripts/sistema/cron/pcautivo 2>/dev/null
+                rm /root/scripts/cautivo/crearap_cautivo.conf 2>/dev/null
+                echo "nombreap=\"${nombreap}\"" >> /root/scripts/cautivo/crearap_cautivo.conf
+                echo "wpaap=${wpaap}" >> /root/scripts/cautivo/crearap_cautivo.conf
+                echo "ifaceap=${ifaceap}" >> /root/scripts/cautivo/crearap_cautivo.conf
+                echo "ifacenet=${ifacenet}" >> /root/scripts/cautivo/crearap_cautivo.conf
+                echo "captura=${captura}" >> /root/scripts/cautivo/crearap_cautivo.conf
+                echo 
+                echo "${VERDE}[++]${NORMAL} Nuevos datos configurados. Pulsa una tecla para volver al menu principal"
+                read
+                menu
+        elif [ $OPCION = "2" ];then
+                cautivo
+        elif [ $OPCION = "3" ];then
+                menu
+        else 
+                echo -ne "${ROJO}[XX]${NORMAL} Opcion incorrecta. Enter para probar otra vez" 
+                read 
+                confirmar_cautivo
+        fi
+}
 
 clear
 function crearap {
@@ -230,7 +275,7 @@ confirmar_crearap
 function crearap_nat {
 clear
 banner
-echo;echo -ne "${VIOLETA} CONFIGURACION ACCES POINT${NORMAL}" ;echo;echo
+echo;echo -ne "${VIOLETA} CONFIGURACION ACCES POINT MODO NAT${NORMAL}" ;echo;echo
 echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que crearemos la red ej. wlan1: ${NORMAL}"
 read ifaceap
 echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
@@ -247,7 +292,26 @@ echo -ne "     La captura se guardara en /root/scripts/crearap/nat/capturas si/n
 read captura
 confirmar_crearap_nat
 }
-
+function cautivo {
+clear
+banner
+echo;echo -ne "${VIOLETA} CONFIGURACION DE PORTAL CAUTIVO${NORMAL}" ;echo;echo
+echo -ne "${AMARILLO}[!!]${NORMAL} Iface con la que crearemos la red ej. wlan1: ${NORMAL}"
+read ifaceap
+echo -ne "${AMARILLO}[!!]${NORMAL} Nombre de la red que crearemos: ${NORMAL}"
+read nombreap
+echo -ne "${AMARILLO}[!!]${NORMAL} WPA de la red que crearemos: ${NORMAL}"
+read wpaap
+echo -e "${AMARILLO}[!!]${NORMAL} Iface con la que daremos intenet ej. eth0,eth1,wlan0."
+echo -e "     Si estas conectado a internet mediante cable rj45, sera eth0."
+echo -e "     Si estas conectado a internet mediante un USB GSM, sera eth1."
+echo -ne "     Si estas conectado a internet mediante wifi, sera wlan0, wlan1):"
+read ifacenet
+echo -e "${AMARILLO}[!!]${NORMAL} Quieres hacer captura de todo? Ten en cuenta el espacio en raspberry"
+echo -ne "     La captura se guardara en /root/scripts/cautivo/capturas si/no: ${NORMAL}"
+read captura
+confirmar_cautivo
+}
 function confirmar_tor {
 clear
 banner
@@ -528,6 +592,29 @@ elif [ $OPCION = "111" ];then
         descargarpitunel
 elif [ $OPCION = "13" ];then
         crearap_nat
+elif [ $OPCION = "14" ];then
+	which nodogsplash
+	if [ $? = "0" ];then
+        	cautivo
+	else 
+		echo -ne "${AZUL}[::]${NORMAL} No tienes nodogsplash instalado. Quieres instalarlo? si/no: "
+		read respuesta
+		if [ $respuesta = "si" ];then
+			apt install libmicrohttpd-dev build-essential
+        		mkdir /root/github
+        		cd /root/github
+        		git clone https://github.com/nodogsplash/nodogsplash.git
+        		cd nodogsplash
+        		make
+        		make install
+        		clear
+        		echo;echo;echo -e "${VERDE}[::]${NORMAL} Ya tienes nodogsplash instalado. pulsa una tecla para continuar."
+			read
+			cautivo
+		else
+			echo;echo  "${AZUL}[::]${NORMAL} Saliendo... Bye!!"
+		fi
+	fi	
 else 
 	menu     
 fi
@@ -545,9 +632,10 @@ echo "${VIOLETA}     [ 10]${NORMAL} Iniciar con router tor"
 echo "${VIOLETA}     [ 11]${NORMAL} Iniciar creando un punto de acceso modo bridge (puente)"
 echo "${VIOLETA}     [ 12]${NORMAL} Iniciar con PBC-bucle.${AZUL} (Recoje todas las pulsaciones y sus WPA al alcance.)${NORMAL}"
 echo "${VIOLETA}     [ 13]${NORMAL} Inicar creando un punto de acceso modo nat.${AZUL} (permite usar wlan0)${NORMAL}"
+echo "${VIOLETA}     [ 14]${NORMAL} Inicar creando un portal cautivo (nodogsplash).${AZUL} (permite usar wlan0)${NORMAL}"
 echo
 echo "${VIOLETA}     [000]${NORMAL} Descargar scripts al inicio${AZUL} (Solo quedara cargado PiTunel)${NORMAL}"
-echo "${VIOLETA}     [111]${NORMAL} Descargar todos los scripts de inicio, incluso PiTunel del inicio${NORMAL}"
+echo "${VIOLETA}     [111]${NORMAL} Descargar todos los scripts de inicio, incluso PiTunel.${NORMAL}"
 echo "${VIOLETA}     [ 0 ]${NORMAL} Salir"
 echo
 echo -ne "${AMARILLO}[??]${NORMAL} Opcion: "
