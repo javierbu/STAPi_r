@@ -35,6 +35,9 @@ Documentacion de STAPi
 --Importante--
 STAPi siempre se manejará con el usuario root.
 
+--Instalación--
+https://www.youtube.com/watch?v=QcOUpD-IrJ0
+
 Soporte de STAPi
 ================
 
