@@ -35,6 +35,13 @@ Documentacion de STAPi
 --Importante--
 STAPi siempre se manejará con el usuario root.
 
+Soporte de STAPi
+================
+
+Para cualquier duda, aclaracion o comentario, pueden hacerlo en el hilo previsto para ello en el foro wifi-libre:
+
+https://www.wifi-libre.com/topic-1690-stapi-resureccion.html
+
 Instrucciones de instalacion:
 ==============================
 Previo a la instalción deberás descargarte la version de kali correspondiente a tu raspberry e instalara. 
