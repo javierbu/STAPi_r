@@ -38,6 +38,9 @@ STAPi siempre se manejará con el usuario root.
 --Instalación--
 https://www.youtube.com/watch?v=QcOUpD-IrJ0
 
+--Router Tor con STAPi--
+https://www.youtube.com/watch?v=jSidmBbB06Y
+
 Soporte de STAPi
 ================
 
