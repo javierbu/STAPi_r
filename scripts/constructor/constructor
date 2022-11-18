@@ -70,10 +70,9 @@ echo;echo -ne "${VIOLETA} Wardriving${NORMAL}" ;echo;echo
 echo "     ${AMARILLO} Las pruebas de exito se han realizado con un gps usb BU-353S4.${NORMAL}"
 echo "     ${AMARILLO} Kismet realizara una captura que se guardara en /root/scripts/wardriving/capturas/.${NORMAL}"
 echo "     ${AMARILLO} Puedes convertir el archivo de kismet en kml, gpx, wiglecsv, o pcap ${NORMAL}"
-echo "     ${AMARILLO} con las herramoentas kismetdb_to_kml, kismetdb_to_gpx, kismetdb_to_pcap y kismetdb_to/wiglecsv. ${NORMAL}"
+echo "     ${AMARILLO} con las herramientas kismetdb_to_kml, kismetdb_to_gpx, kismetdb_to_pcap y kismetdb_to_wiglecsv. ${NORMAL}"
 echo 
-echo -ne "${AMARILLO} Que interface quieres usar para el Wardriving? (La integrada ded la rpi no es aconsejable) ej. wlan1
-: ${NORMAL}"
+echo -ne "${AMARILLO} Que interface quieres usar para el Wardriving? (La integrada ded la rpi es perfectamente compatible) ej. wlan0: ${NORMAL}"
 read iface
 confirmar_wardriving
 }
