@@ -79,7 +79,7 @@ mkdir /root/scripts/wardriving/capturas 2>/dev/null
 mkdir /root/scripts/mana/capturas 2>/dev/null
 # Preguntamos por la instalacion de nodogsplash
 clear
-echo;echo -ne "${AMARILLO}[??]${NORMAL} Quieres instalar nodogsplash? sera necesario si quieres hacer un portal cautivo. si/no: "
+echo;echo -ne "${AMARILLO}[??]${NORMAL} Quieres instalar nodogsplash? sera necesario si quieres hacer un portal cautivo y el ataque con awitas. si/no: "
 read respuesta
 if [ $respuesta = si ];then
 	apt install git libmicrohttpd-dev build-essential
