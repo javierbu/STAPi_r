@@ -150,7 +150,7 @@ read OPCION
                 read
                 menu
         elif [ $OPCION = "2" ];then
-                crear_ap
+                crearap
         elif [ $OPCION = "3" ];then
                 menu
         else 
@@ -195,7 +195,7 @@ read OPCION
                 read
                 menu
         elif [ $OPCION = "2" ];then
-                crear_ap_nat
+                crearap_nat
         elif [ $OPCION = "3" ];then
                 menu
         else 
