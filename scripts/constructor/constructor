@@ -150,7 +150,7 @@ read OPCION
                 read
                 menu
         elif [ $OPCION = "2" ];then
-                crearap
+               crearap
         elif [ $OPCION = "3" ];then
                 menu
         else 
