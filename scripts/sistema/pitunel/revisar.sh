@@ -2,7 +2,7 @@
 source /root/scripts/sistema/pitunel/datostunel
 ps aux | grep sshpass | grep -v grep
 if [ $? = 0 ] ;then
-	sshpass -p $pass ssh -p 22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -t -t $user@$ip "touch /tmp/vivo"
+	sshpass -p $pass ssh -p $puerto -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -t -t $user@$ip "touch /tmp/vivo"
 	if [ $? = 0 ] ;then
 		echo
 		exit 0
