@@ -45,7 +45,7 @@ if [ $? != 0 ]; then
 	oler
 fi
 wpa_cli -i "$iface" wps_pbc any
-krono=120
+krono=20
     while [ $krono -gt 0 ]; 
       do
         krono=$((krono - 1))
