@@ -23,8 +23,6 @@ rm /var/run/wpa_supplicant/${iface} 2>/dev/null
 ip link set "$iface" down
 iwconfig "$iface" mode managed
 ip link set "$iface" up
-iwconfig "$iface" mode managed
-ip link set "$iface" up
 echo " Listo, todo limpio. bye!"
 echo
 exit
@@ -36,8 +34,6 @@ killall wpa_supplicant dhclient 2>/dev/null
 rfkill unblock wifi
 rm /var/run/wpa_supplicant/${iface} 2>/dev/null
 ip link set "$iface" down
-iwconfig "$iface" mode managed
-ip link set "$iface" up
 iwconfig "$iface" mode managed
 ip link set "$iface" up
 echo "ctrl_interface=/var/run/wpa_supplicant
