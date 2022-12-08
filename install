@@ -71,12 +71,13 @@ touch /etc/motd
 # Eliminamos y creamos /etc/hostname
 rm /etc/hostname
 echo "STAPi" > /etc/hostname
-# creamos carpetas para capturas por si las crea github
+# creamos carpetas para capturas por si no las crea github
 mkdir /root/scripts/crearap/capturas 2>/dev/null
 mkdir /root/scripts/crearap/nat/capturas 2>/dev/null
 mkdir /root/scripts/cautivo/capturas 2>/dev/null
 mkdir /root/scripts/wardriving/capturas 2>/dev/null
 mkdir /root/scripts/mana/capturas 2>/dev/null
+mkdir /root/scripts/pbc-bucle/llaves 2>/dev/null
 # Preguntamos por la instalacion de nodogsplash
 clear
 echo;echo -ne "${AMARILLO}[??]${NORMAL} Quieres instalar nodogsplash? sera necesario si quieres hacer un portal cautivo y el ataque con awitas. si/no: "
