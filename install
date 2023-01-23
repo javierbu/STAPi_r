@@ -24,7 +24,7 @@ else
 	echo "${ROJO}[XX]${NORMAL} Algo salio mal. Por favor comprueba tu conexion a internet y vuelve a intentarlo."
 	exit
 fi
-apt-get install  sshpass  aircrack-ng kismet gpsd gpsd-clients util-linux procps hostapd iproute2 iw haveged bash-completion dnsmasq tor berate-ap
+apt-get install tcpdump sshpass  aircrack-ng kismet gpsd gpsd-clients util-linux procps hostapd iproute2 iw haveged bash-completion dnsmasq tor berate-ap
 if [ $? = "0" ]; then
         echo "${VERDE}[++]${NORMAL} Dependencias instaladas con exito"
 else

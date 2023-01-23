@@ -1,6 +1,12 @@
 #!/bin/bash
 #source /root/scripts/automana/automana2
 source /root/scripts/sistema/colores
+trap 'stop' INT
+function stop (){
+clear
+tput cnorm
+exit
+}
 function wardriving {
         clear
         echo
@@ -78,7 +84,8 @@ function pbc-bucle {
 				echo;echo "${AMARILLO}  Cierra esto pulsando ctrl + c. Puedes volver a este script ejecutando welcome${NORMAL}";
 				echo "${AMARILLO} !!! ESTO NO PARARA EL ATQUE NI LO DESCARGARA DE INICIO. PARA ELLO USA welcome!!!${NORMAL}";echo;echo;
 				echo "   ${ROJO} ATENCION!!!! Cuando esta este modulo trabajando, no tendras posibilidad de conectarte a una red wifi${NORMAL}"
-				tail  -n 12   /tmp/pbc-bucle.log
+				tput civis
+				tail -n 12   /tmp/pbc-bucle.log
 				sleep 1
 				clear
 				done
