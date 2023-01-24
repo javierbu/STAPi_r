@@ -26,6 +26,7 @@ Stapi automatiza algunas funciones que quizá sean de tu interés en tu raspberr
 - Wardriving.
 - Captura PBC WPS
 - Conexioón reversa tunelizada ssh. PiTunel.
+- Awitas integrado. Evil twin para WPA con AP protegido con WPA pidiendo pulsación de botón WPS https://github.com/javierbu/awitas 
 
 Está escita en bash y pensada para usarla solo en modo consola. Nunca se usa el modo gráfico.
 
