@@ -52,7 +52,7 @@ https://www.wifi-libre.com/topic-1690-stapi-resureccion.html
 Instrucciones de instalacion:
 ==============================
 Previo a la instalción deberás descargarte la version de kali correspondiente a tu raspberry e instalara. 
-En estos momentos (nov. 2022) la versión es la 2022.3. Puedes descargarte la neva version aquí:
+En estos momentos (Enero 2023) la versión es la 2022.4. Puedes descargarte la neva version aquí:
 
 https://www.kali.org/get-kali/#kali-arm
 
